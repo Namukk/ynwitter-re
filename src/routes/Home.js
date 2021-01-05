@@ -6,7 +6,7 @@ const Home = (userObj) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
   const getNweets = async () => {
-    const dbNweets = await dbService.collection("ynweets").get();
+    const dbNweets = await dbService.collection("Ynweets").get();
     dbNweets.forEach((document) => {
       const nweetObject = {
         ...document.data(),
@@ -21,10 +21,9 @@ const Home = (userObj) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection("ynweets").add({
+    await dbService.collection("Ynweets").add({
       text: nweet,
       createdAt: Date.now(),
-      creator: userObj.uid,
     });
     setNweet("");
   };
@@ -34,6 +33,7 @@ const Home = (userObj) => {
     } = event;
     setNweet(value);
   };
+  console.log(nweets);
   return (
     <div>
       <form onSubmit={onSubmit}>
