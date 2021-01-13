@@ -5,19 +5,28 @@ import React, { useEffect, useState } from "react";
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const getNweets = async () => {
-    const dbNweets = await dbService.collection("Ynweets").get();
-    dbNweets.forEach((document) => {
-      const nweetObject = {
-        ...document.data(),
-        id: document.id,
-      };
-      setNweets((prev) => [nweetObject, ...prev]);
-    });
-  };
+  // const getNweets = async () => {
+  //   const dbNweets = await dbService.collection("Ynweets").get();
+  //   dbNweets.forEach((document) => {
+  //     const nweetObject = {
+  //       ...document.data(),
+  //       id: document.id,
+  //     };
+  //     setNweets((prev) => [nweetObject, ...prev]);
+  //   });
+  // };  ** Old version
+
   useEffect(() => {
-    getNweets();
+    // getNweets()
+    dbService.collection("Ynweets").onSnapshot((snapshot) => {
+      const nweetArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNweet(nweetArray);
+    });
   }, []);
+  //Old version과는 달리 re-render 하지 않아도 돼서 더 좋음.
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -34,7 +43,6 @@ const Home = ({ userObj }) => {
     } = event;
     setNweet(value);
   };
-  console.log(nweets);
   return (
     <div>
       <form onSubmit={onSubmit}>
