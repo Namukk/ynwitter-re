@@ -23,7 +23,7 @@ const Home = ({ userObj }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setNweet(nweetArray);
+      setNweets(nweetArray);
     });
   }, []);
   //Old version과는 달리 re-render 하지 않아도 돼서 더 좋음.
