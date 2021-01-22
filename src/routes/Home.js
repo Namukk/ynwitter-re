@@ -1,3 +1,4 @@
+import Nweet from "components/Nweet";
 import { dbService } from "fbase";
 import React, { useEffect, useState } from "react";
 
@@ -14,7 +15,7 @@ const Home = ({ userObj }) => {
   //     };
   //     setNweets((prev) => [nweetObject, ...prev]);
   //   });
-  // };  ** Old version
+  // };  ** Old version 이거보다는 getNweets() 지우고 map 쓰는게 더 좋음 for realtime
 
   useEffect(() => {
     // getNweets()
@@ -57,9 +58,11 @@ const Home = ({ userObj }) => {
       </form>
       <div>
         {nweets.map((nweet) => (
-          <div key={nweet.id}>
-            <h4>{nweet.text}</h4>
-          </div>
+          <Nweet
+            key={nweet.id}
+            nweetObj={nweet}
+            isOwner={nweet.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
