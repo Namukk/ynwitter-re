@@ -1,6 +1,7 @@
 import Nweet from "components/Nweet";
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 //Home
 const Home = ({ userObj }) => {
@@ -32,12 +33,23 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection("Ynweets").add({
+    let attachmentUrl = "";
+    if (attachment !== "") {
+      const attachmentRef = storageService
+        .ref()
+        .child(`${userObj.uid}/${uuidv4()}`);
+      const response = await attachmentRef.putString(attachment, "data_url");
+      attachmentUrl = await response.ref.getDownloadURL();
+    }
+    const ynweets = {
       text: nweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
-    });
+      attachmentUrl,
+    };
+    await dbService.collection("Ynweets").add(ynweets);
     setNweet("");
+    setAttachment("");
   };
   const onChange = (event) => {
     const {
@@ -56,7 +68,6 @@ const Home = ({ userObj }) => {
         currentTarget: { result },
       } = finishedEvent;
       setAttachment(result);
-      console.log(finishedEvent);
     };
     reader.readAsDataURL(theFile);
   };
