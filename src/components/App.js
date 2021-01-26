@@ -9,20 +9,39 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid.refreshUser,
+          updateProfile: (args) => user.updateProfile(args),
+        });
         // setIsLoggedIn(true);
         setUserObj(user);
+      } else {
+        setUserObj(null);
       }
       // else {
       //   setIsLoggedIn(false);
       // }
-      // 7번, 12번, 15-17번 지우고 23번에 isLoggedIn={isLoggedIn} 대신에 isLoggedIn={Boolean(userObj)} 써도 같음. userObj일 때만 로그인 할테니까
+      // 7번, 17번, 20-22번 지우고 23번에 isLoggedIn={isLoggedIn} 대신에 isLoggedIn={Boolean(userObj)} 써도 같음. userObj일 때만 로그인 할테니까
       setInit(true);
     });
   }, []);
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid.refreshUser,
+      updateProfile: (args) => user.updateProfile(args),
+    });
+  };
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <AppRouter
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+          refreshUser={refreshUser}
+        />
       ) : (
         "Initializing..."
       )}
