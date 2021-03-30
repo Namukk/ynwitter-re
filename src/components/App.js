@@ -22,7 +22,7 @@ function App() {
       // else {
       //   setIsLoggedIn(false);
       // }
-      // 7번, 17번, 20-22번 지우고 23번에 isLoggedIn={isLoggedIn} 대신에 isLoggedIn={Boolean(userObj)} 써도 같음. userObj일 때만 로그인 할테니까
+      // 7번, 17번, 22-24번 지우고 41번에 isLoggedIn={isLoggedIn} 대신에 isLoggedIn={Boolean(userObj)} 써도 같음. userObj일 때만 로그인 할테니까
       setInit(true);
     });
   }, []);
